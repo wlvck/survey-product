@@ -1,4 +1,6 @@
 from django.http import Http404
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import User
 from rest_framework import status
@@ -32,6 +34,9 @@ class UpdateUser(APIView):
 
 
 class GetUserList(APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
